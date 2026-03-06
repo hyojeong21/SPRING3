@@ -1,7 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!-- ~{ ... }: Thymeleaf 템플릿 경로 표현식
+	layout/basic :: setContent: basic.html 안의 setContent fragment (setContent라는 fragment를 호출하는 것)
+	setContent(~{this::content}): 현재 페이지의 content fragment를 setContent에 전달
+	따라서 basic.html의 setContent fragment를 사용하면서 현재 페이지의 content fragment를 파라미터로 전달한다 -->
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+	<!-- content 라는 fragment 정의. 즉, fragment는 재사용 가능한 HTML 조각 -->
 	<th:block th:fragment="content">
 		<h1>방명록 리스트 페이지</h1>
+
+		<span> <a th:href="@{/guestbook/register}">
+				<button type="button" class="btn btn-outline-primary">REGISTER
+				</button>
+		</a>
+		</span>
+
+		<table border="1">
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>Writer</th>
+				<th>Regdate</th>
+			</tr>
+
+			<tr th:each="dto : ${result.dtoList}">
+				<td>
+					<a th:href="@{/guestbook/read(bno=${dto.bno}, page=${result.page})}">
+						[[${dto.bno}]]
+					</a>
+				</td>
+				<td>[[${dto.title}]]</td>
+				<td>[[${dto.writer}]]</td>
+				<td>[[${dto.regDate}]]</td>
+			</tr>
+		</table>
+
+		<!-- 페이징 처리 -->
+		<ul>
+			<li th:if="${result.prev}"><a
+				th:href="@{/guestbook/list(page=${result.start-1})}">이전</a></li>
+			<li th:each="page : ${result.pageList}"><a
+				th:href="@{/guestbook/list(page =${page})}">[[${page}]]</a></li>
+			<li th:if="${result.next}"><a
+				th:href="@{/guestbook/list(page=${result.end+1})}">다음</a></li>
+		</ul>
+
+		<div class="modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>Modal body text goes here.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save
+							changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script th:inline="javascript">
+        	var msg = [[${msg}]];
+        	console.log(msg);
+        	if(msg){
+        		$(".modal").show();
+        	}
+        </script>
+
 	</th:block>
 </th:block>

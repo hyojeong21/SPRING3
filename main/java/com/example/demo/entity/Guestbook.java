@@ -7,9 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Getter
 @Entity
 @Builder
 @AllArgsConstructor
@@ -26,4 +28,11 @@ public class Guestbook extends BaseEntity {
    private String content;
    @Column(length=50, nullable=false)
    private String writer;
+   
+   public void changeTitle(String title) {
+	   this.title = title;
+   }
+   public void changeContent(String content) {
+	   this.content = content;
+   }
 }
