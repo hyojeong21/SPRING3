@@ -89,19 +89,23 @@ public class GuestbookServiceImpl implements GuestbookService {
    }
    
    // 검색어 기능 추가
+   // PageRequestDTO 안에 있는 검색 조건(type, keyword) 을 받아서 BooleanBuilder(조건 객체)를 만들어 반환
    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
 	   String type = requestDTO.getType();
 	   BooleanBuilder booleanBuilder = new BooleanBuilder();
 	   QGuestbook qGuestbook = QGuestbook.guestbook;
 	   
+	   // 검색 키워드 가져오기
 	   String keyword = requestDTO.getKeyword();
 	   
+	   // 기본 조건 생성. gt: greater than 의미, 즉 bno > 0 조건을 만듦
 	   BooleanExpression expression = qGuestbook.bno.gt(0L);
 	   
+	   // 기본 조건 추가
 	   booleanBuilder.and(expression);
 	   
 	   if(type == null || type.trim().length()==0) {
-		   // 검색 조건이 없는 경우
+		   // 검색 조건이 없는 경우 그냥 반환
 		   return booleanBuilder;
 	   }
 	   
@@ -118,7 +122,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 		   conditionBuilder.or(qGuestbook.writer.contains(keyword));
 	   }
 	   
-	   // 모든 조건을 통합한다
+	   // 모든 조건을 통합한다 (전체 검색 조건 추가)
 	   booleanBuilder.and(conditionBuilder);
 	   
 	   return booleanBuilder;
