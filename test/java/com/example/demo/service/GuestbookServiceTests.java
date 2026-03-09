@@ -31,19 +31,24 @@ public class GuestbookServiceTests {
 	// 요청 페이지에 따른 글 목록 리턴하는 로직 테스트하기
 	@Test
 	public void testList() {
-		PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
-		PageResultDTO<GuestbookDTO, Guestbook> resultDTO = guestbookService.getList(pageRequestDTO);
+		PageRequestDTO pageRequestDTO = 
+				PageRequestDTO.builder().page(1).size(10)
+				.type("tc")
+				.keyword("sample")
+				.build();
+		PageResultDTO<GuestbookDTO, Guestbook> resultDTO = 
+				guestbookService.getList(pageRequestDTO);
 		
 		System.out.println("PREV: " + resultDTO.isPrev());
 		System.out.println("NEXT: " + resultDTO.isNext());
 		System.out.println("TOTAL: " + resultDTO.getTotalPage());
-		System.out.println("=====================================================================");
+		System.out.println("====================================");
 		
 		for(GuestbookDTO guestbookDTO : resultDTO.getDtoList()) {
 			System.out.println(guestbookDTO);
 		}
 		
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.println("++++++++++++++++++++++++++++++++++++");
 		resultDTO.getPageList().forEach(i -> System.out.println(i));
 	}
 	

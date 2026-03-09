@@ -16,6 +16,8 @@ public class PageRequestDTO {
 
 	private int page;
 	private int size;
+	private String type;	// 검색어 타입
+	private String keyword;	// 검색어 내용
 	
 	// 생성자를 이용해서 필드값 초기화
 	public PageRequestDTO() {
